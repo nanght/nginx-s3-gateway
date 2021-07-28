@@ -172,6 +172,7 @@ function s3BaseUri(r) {
  */
 function s3uri(r) {
     var uriPath = r.variables.uri_path;
+    var hostPath = r.variables.real_host;
     var basePath = s3BaseUri(r);
     var path;
 
@@ -179,15 +180,15 @@ function s3uri(r) {
     if (allow_listing) {
         var queryParams = _s3DirQueryParams(uriPath, r.method);
         if (queryParams.length > 0) {
-            path = basePath + '/?' + queryParams;
+            path = basePath + '/' + hostPath + '/?' + queryParams;
         } else {
-            path = basePath + uriPath;
+            path = basePath + '/' + hostPath + uriPath;
         }
     } else {
-        path = basePath + uriPath;
+        path = basePath + '/' + hostPath + uriPath;
     }
 
-    _debug_log(r, 'S3 Request URI: ' + r.method + ' ' + path);
+    _debug_log(r, 'S3 Request URI: ' + hostPath + ' - ' + r.method + ' ' + path);
     return path;
 }
 
